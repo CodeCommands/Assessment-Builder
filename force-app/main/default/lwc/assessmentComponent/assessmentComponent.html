@@ -1,0 +1,48 @@
+<!-- assessmentComponent.html -->
+<template>
+    <lightning-card title="Assessment">
+        <div class="slds-m-around_medium">
+            <!-- Loading Spinner -->
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+            </template>
+
+            <!-- Error Message -->
+            <template if:true={error}>
+                <div class="slds-text-color_error slds-m-around_medium">
+                    <p>{errorMessage}</p>
+                </div>
+            </template>
+
+            <!-- Questions -->
+            <template if:true={questions}>
+                <lightning-layout multiple-rows>
+                    <lightning-layout-item>
+                        <template for:each={questions} for:item="question">
+                            <div key={question.Id} class="slds-m-bottom_medium">
+                                <label class="slds-form-element__label">
+                                    {question.Question_Text__c}
+                                    <template if:true={question.Is_Required__c}>
+                                        <span class="slds-text-color_error">*</span>
+                                    </template>
+                                </label>
+                                <div class="slds-form-element__control slds-m-top_x-small">
+                                    <!-- Use onvaluechange instead of onchange -->
+                                    <c-assessment-question
+                                        question={question}
+                                        onvaluechange={handleValueChange}
+                                    ></c-assessment-question>
+                                </div>
+                            </div>
+                        </template>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <lightning-button
+                    variant="brand"
+                    label="Submit"
+                    onclick={handleSubmit}
+                ></lightning-button>
+            </template>
+        </div>
+    </lightning-card>
+</template>
